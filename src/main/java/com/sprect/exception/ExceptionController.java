@@ -1,6 +1,6 @@
 package com.sprect.exception;
 
-import com.sprect.model.response.ResponseError;
+import com.sprect.model.ResponseError;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

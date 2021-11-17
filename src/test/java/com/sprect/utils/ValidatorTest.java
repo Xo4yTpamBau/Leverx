@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 class ValidatorTest {
-    private final String FAILED_VALIDATE_PHONE = "The phone is specified incorrectly";
     private final String FAILED_VALIDATE_EMAIL = "The email address is specified incorrectly";
     private final String FAILED_VALIDATE_USERNAME = "Username must be between 3 and 18 characters long";
     private final String FAILED_VALIDATE_PASSWORD = "The password must consist of 8 characters and contain at least one digit, one uppercase and one lowercase";
@@ -105,42 +104,6 @@ class ValidatorTest {
                 ValidationFailureException.class,
                 () -> validator.regExpUsername("qwertyuiop[]asdfghj"));
         Assertions.assertEquals(FAILED_VALIDATE_USERNAME, exception.getMessage());
-    }
-
-    @Test
-    @SneakyThrows
-    void validationPhone() {
-        validator.regExpPhone("375251234567");
-        validator.regExpPhone("375291234567");
-        validator.regExpPhone("375331234567");
-        validator.regExpPhone("375441234567");
-
-        ValidationFailureException exception;
-
-        exception = Assertions.assertThrows(
-                ValidationFailureException.class,
-                () -> validator.regExpPhone("37544      "));
-        Assertions.assertEquals(FAILED_VALIDATE_PHONE, exception.getMessage());
-
-        exception = Assertions.assertThrows(
-                ValidationFailureException.class,
-                () -> validator.regExpPhone("           "));
-        Assertions.assertEquals(FAILED_VALIDATE_PHONE, exception.getMessage());
-
-        exception = Assertions.assertThrows(
-                ValidationFailureException.class,
-                () -> validator.regExpPhone(""));
-        Assertions.assertEquals(FAILED_VALIDATE_PHONE, exception.getMessage());
-
-        exception = Assertions.assertThrows(
-                ValidationFailureException.class,
-                () -> validator.regExpPhone("37544fghfgds"));
-        Assertions.assertEquals(FAILED_VALIDATE_PHONE, exception.getMessage());
-
-        exception = Assertions.assertThrows(
-                ValidationFailureException.class,
-                () -> validator.regExpPhone("37517fghfgds"));
-        Assertions.assertEquals(FAILED_VALIDATE_PHONE, exception.getMessage());
     }
 
     @Test

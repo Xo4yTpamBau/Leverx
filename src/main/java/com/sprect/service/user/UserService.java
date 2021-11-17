@@ -11,7 +11,7 @@ public interface UserService extends org.springframework.security.core.userdetai
 
     void checkBlockedUser(StatusUser status);
 
-    User findUserByUEP(String username);
+    User findUserByUE(String username);
 
     void confirmationEmail(String username);
 
@@ -24,7 +24,6 @@ public interface UserService extends org.springframework.security.core.userdetai
 
     User editUsername(String oldUsername, String newUsername);
 
-    User editProfileDescription(String username, String newProfileDescription);
 
     boolean isEmailExist(String email);
 

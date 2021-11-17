@@ -66,23 +66,7 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString("accessToken")))
                 .andExpect(content().string(containsString("refreshToken")))
                 .andExpect(content().string(containsString(String.format(
-                        USER, "4", "test4", "test4@mail.com", "375441234567", "null", ""))));
-    }
-
-    @Test
-    @SneakyThrows
-    void successLoginForPhone() {
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375441234567\"," +
-                                "\"password\":\"1234Test\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(content().string(containsString("accessToken")))
-                .andExpect(content().string(containsString("refreshToken")))
-                .andExpect(content().string(containsString(String.format(
-                        USER, "4", "test4", "test4@mail.com", "375441234567", "null", ""))));
+                        USER, "4", "test4", "test4@mail.com", "null", ""))));
     }
 
     @Test
@@ -99,7 +83,7 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString("accessToken")))
                 .andExpect(content().string(containsString("refreshToken")))
                 .andExpect(content().string(containsString(String.format(
-                        USER, "4", "test4", "test4@mail.com", "375441234567", "null", ""))));
+                        USER, "4", "test4", "test4@mail.com", "null", ""))));
     }
 
     @Test
@@ -116,23 +100,7 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString("accessToken")))
                 .andExpect(content().string(containsString("refreshToken")))
                 .andExpect(content().string(containsString(String.format(
-                        USER, "1", "test", "test@mail.com", "375251234567", "null", "null"))));
-    }
-
-    @Test
-    @SneakyThrows
-    void successLoginForPhoneNotAvatar() {
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375251234567\"," +
-                                "\"password\":\"1234Test\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(content().string(containsString("accessToken")))
-                .andExpect(content().string(containsString("refreshToken")))
-                .andExpect(content().string(containsString(String.format(
-                        USER, "1", "test", "test@mail.com", "375251234567", "null", "null"))));
+                        USER, "1", "test", "test@mail.com", "null", "null"))));
     }
 
     @Test
@@ -149,7 +117,7 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString("accessToken")))
                 .andExpect(content().string(containsString("refreshToken")))
                 .andExpect(content().string(containsString(String.format(
-                        USER, "1", "test", "test@mail.com", "375251234567", "null", "null"))));
+                        USER, "1", "test", "test@mail.com", "null", "null"))));
     }
 
 
@@ -168,20 +136,7 @@ class AuthControllerTest {
                         RESPONSE_ERROR, 401, BAD_CREDENTIALS))));
     }
 
-    @Test
-    @SneakyThrows
-    void badCredentialsWrongPasswordLoginForPhone() {
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375251234567\"," +
-                                "\"password\":\"1234Tes\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string(containsString(String.format(
-                        RESPONSE_ERROR, 401, BAD_CREDENTIALS))));
-    }
+
 
     @Test
     @SneakyThrows
@@ -213,20 +168,7 @@ class AuthControllerTest {
                         RESPONSE_ERROR, 401, BAD_CREDENTIALS))));
     }
 
-    @Test
-    @SneakyThrows
-    void BadCredentialsUserNotFoundLoginForPhone() {
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375251111111\"," +
-                                "\"password\":\"1234Test\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string(containsString(String.format(
-                        RESPONSE_ERROR, 401, BAD_CREDENTIALS))));
-    }
+
 
     @Test
     @SneakyThrows
@@ -258,20 +200,7 @@ class AuthControllerTest {
                         RESPONSE_ERROR, 401, NOT_CONFIRM_EMAIL))));
     }
 
-    @Test
-    @SneakyThrows
-    void notConfirmEmailLoginForPhone() {
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375331234567\"," +
-                                "\"password\":\"1234Tes\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string(containsString(String.format(
-                        RESPONSE_ERROR, 401, NOT_CONFIRM_EMAIL))));
-    }
+
 
     @Test
     @SneakyThrows
@@ -303,20 +232,7 @@ class AuthControllerTest {
                         RESPONSE_ERROR, 401, USER_BLOCKED))));
     }
 
-    @Test
-    @SneakyThrows
-    void blockedLoginForPhone() {
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375291234567\"," +
-                                "\"password\":\"1234Tes\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string(containsString(String.format(
-                        RESPONSE_ERROR, 401, USER_BLOCKED))));
-    }
+
 
     @Test
     @SneakyThrows
@@ -349,21 +265,7 @@ class AuthControllerTest {
                         RESPONSE_ERROR, 403, BLOCKER_USER_TRY_AUTH))));
     }
 
-    @Test
-    @SneakyThrows
-    void blockTryAuthLoginForPhone() {
-        tryAuthRepository.save(new TryAuth(1L, 10L));
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375251234567\"," +
-                                "\"password\":\"1234Test\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isForbidden())
-                .andExpect(content().string(containsString(String.format(
-                        RESPONSE_ERROR, 403, BLOCKER_USER_TRY_AUTH))));
-    }
+
 
     @Test
     @SneakyThrows
@@ -396,7 +298,7 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString("accessToken")))
                 .andExpect(content().string(containsString("refreshToken")))
                 .andExpect(content().string(containsString(String.format(
-                        USER, "1", "test", "test@mail.com", "375251234567", "null", "null"))));
+                        USER, "1", "test", "test@mail.com", "null", "null"))));
 
         Assertions.assertFalse(tryAuthRepository.existsById(1L));
     }
@@ -416,31 +318,10 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString("accessToken")))
                 .andExpect(content().string(containsString("refreshToken")))
                 .andExpect(content().string(containsString(String.format(
-                        USER, "1", "test", "test@mail.com", "375251234567", "null", "null"))));
+                        USER, "1", "test", "test@mail.com", "null", "null"))));
 
         Assertions.assertFalse(tryAuthRepository.existsById(1L));
     }
-
-    @Test
-    @SneakyThrows
-    void resetTryAuthSuccessLoginPhone() {
-        tryAuthRepository.save(new TryAuth(1L, 9L));
-        this.mockMvc.perform(post("/auth/signIn")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{" +
-                                "\"username\":\"375251234567\"," +
-                                "\"password\":\"1234Test\"" +
-                                "}"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("accessToken")))
-                .andExpect(content().string(containsString("refreshToken")))
-                .andExpect(content().string(containsString(String.format(
-                        USER, "1", "test", "test@mail.com", "375251234567", "null", "null"))));
-
-        Assertions.assertFalse(tryAuthRepository.existsById(1L));
-    }
-
 
     @Test
     @SneakyThrows
@@ -452,19 +333,16 @@ class AuthControllerTest {
                                 "    \"firstName\" : \"test\",\n" +
                                 "    \"lastName\" : \"test\",\n" +
                                 "    \"password\" : \"1234Test\",\n" +
-                                "    \"email\" : \"test123@mail.com\",\n" +
-                                "    \"phone\" : \"375441111111\"\n" +
+                                "    \"email\" : \"test123@mail.com\"\n" +
                                 "}"))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString(String.format("" +
                         "\"username\":\"test123\"," +
                         "\"email\":\"test123@mail.com\"," +
-                        "\"phone\":\"375441111111\"," +
                         "\"firstName\":\"test\"," +
                         "\"lastName\":\"test\"," +
                         "\"registrationDate\":\"%s\"," +
-                        "\"profileDescription\":null," +
                         "\"urlAvatar\":null" +
                         "}", LocalDate.now()))));
     }
@@ -479,8 +357,7 @@ class AuthControllerTest {
                                 "    \"firstName\" : \"\",\n" +
                                 "    \"lastName\" : \"\",\n" +
                                 "    \"password\" : \"\",\n" +
-                                "    \"email\" : \"\",\n" +
-                                "    \"phone\" : \"\"\n" +
+                                "    \"email\" : \"\"\n" +
                                 "}"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -488,8 +365,7 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString(FAILED_VALIDATE_FIRST_NAME)))
                 .andExpect(content().string(containsString(FAILED_VALIDATE_LAST_NAME)))
                 .andExpect(content().string(containsString(FAILED_VALIDATE_PASSWORD)))
-                .andExpect(content().string(containsString(FAILED_VALIDATE_EMAIL)))
-                .andExpect(content().string(containsString(FAILED_VALIDATE_PHONE)));
+                .andExpect(content().string(containsString(FAILED_VALIDATE_EMAIL)));
     }
 
     @Test
@@ -502,8 +378,7 @@ class AuthControllerTest {
                                 "    \"firstName\":\"test\"," +
                                 "    \"lastName\":\"test\"," +
                                 "    \"password\" : \"1234Test\",\n" +
-                                "    \"email\" : \"test@mail.com\",\n" +
-                                "    \"phone\" : \"375251234567\"\n" +
+                                "    \"email\" : \"test@mail.com\"\n" +
                                 "}"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -522,7 +397,7 @@ class AuthControllerTest {
                 .andExpect(status().is3xxRedirection());
 
         Assertions.assertEquals(StatusUser.ACTIVE,
-                userService.findUserByUEP("test2@mail.com").getStatus());
+                userService.findUserByUE("test2@mail.com").getStatus());
     }
 
     @Test
@@ -539,7 +414,7 @@ class AuthControllerTest {
                 .andExpect(content().string(containsString(CONFIRM_EXPIRED)));
 
         Assertions.assertEquals(StatusUser.NOT_ACTIVE,
-                userService.findUserByUEP("test2@mail.com").getStatus());
+                userService.findUserByUE("test2@mail.com").getStatus());
     }
 
     @Test
@@ -553,7 +428,7 @@ class AuthControllerTest {
 
 
         Assertions.assertEquals(StatusUser.NOT_ACTIVE,
-                userService.findUserByUEP("test2").getStatus());
+                userService.findUserByUE("test2").getStatus());
     }
 
     @Test
@@ -666,39 +541,5 @@ class AuthControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(containsString(String.format(
                         RESPONSE_ERROR, 400, USERNAME_BUSY))));
-    }
-
-    @Test
-    @SneakyThrows
-    void isExistPhone() {
-        this.mockMvc.perform(post("/auth/isExistPhone")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"phone\":\"375440000000\"}"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @SneakyThrows
-    void badRequestIsExistPhone() {
-        this.mockMvc.perform(post("/auth/isExistPhone")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"phone\":\"\"}"))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString(String.format(
-                        RESPONSE_ERROR, 400, FAILED_VALIDATE_PHONE))));
-    }
-
-    @Test
-    @SneakyThrows
-    void failedIsExistPhone() {
-        this.mockMvc.perform(post("/auth/isExistPhone")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"phone\":\"375251234567\"}"))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString(String.format(
-                        RESPONSE_ERROR, 400, PHONE_BUSY))));
     }
 }

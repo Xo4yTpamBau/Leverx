@@ -1,6 +1,7 @@
 package com.sprect.service.jwt;
 
-import com.sprect.model.entity.Role;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sprect.model.Role;
 import com.sprect.model.entity.User;
 import com.sprect.model.redis.AccessKey;
 import com.sprect.model.redis.BlackListTokens;
@@ -9,7 +10,6 @@ import com.sprect.repository.nosql.AccessKeyRepository;
 import com.sprect.repository.nosql.BlackListRepositories;
 import com.sprect.repository.nosql.RefreshKeyRepository;
 import com.sprect.service.user.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.SneakyThrows;
@@ -76,12 +76,10 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public Map<String, Object> createTokens(String username, List<String> types) {
-        User user = userService.findUserByUEP(username);
-        List<Role> roles = new ArrayList<>(user.getRole());
-
+        User user = userService.findUserByUE(username);
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("id", user.getIdUser());
-        claims.put("roles", getRoleNames(roles));
+        claims.put("role", user.getRole().name());
 
         Map<String, Object> response = new HashMap<>();
 
@@ -185,12 +183,6 @@ public class JwtServiceImpl implements JwtService {
             return new Date(now.getTime() + validityInMillisecondsAccess);
         }
         return new Date(now.getTime() + validityInMillisecondsRefresh);
-    }
-
-    private List<String> getRoleNames(List<Role> userRoles) {
-        return userRoles.stream()
-                .map(Role::getNameRole)
-                .collect(Collectors.toList());
     }
 
     private SecretKey getRandomKey(String username, String refresh) {

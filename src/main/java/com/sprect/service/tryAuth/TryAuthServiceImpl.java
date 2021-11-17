@@ -4,7 +4,6 @@ import com.sprect.exception.TryAuthException;
 import com.sprect.model.redis.TryAuth;
 import com.sprect.repository.nosql.TryAuthRepository;
 import com.sprect.service.mail.MailService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,7 +11,6 @@ import java.util.Optional;
 import static com.sprect.utils.DefaultString.BLOCKED_USER_TRY_AUTH;
 
 @Service
-@Slf4j
 public class TryAuthServiceImpl implements TryAuthService {
     private final TryAuthRepository tryAuthRepository;
     private final MailService mailService;
@@ -31,9 +29,6 @@ public class TryAuthServiceImpl implements TryAuthService {
 //        if (countTryById == 5){
 //            mailService.sendSuspiciousActivity(userByUEN.getEmail(), "Suspicious activity");
 //    }
-
-
-        log.info("Authorization attempt № {} by the user {}", ++countTryById, id);
 
         if (countTryById > 10) {
             throw new TryAuthException(BLOCKED_USER_TRY_AUTH);

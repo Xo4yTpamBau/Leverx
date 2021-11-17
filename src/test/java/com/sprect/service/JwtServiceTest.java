@@ -1,6 +1,6 @@
 package com.sprect.service;
 
-import com.sprect.model.entity.Role;
+import com.sprect.model.Role;
 import com.sprect.model.entity.User;
 import com.sprect.service.jwt.JwtService;
 import com.sprect.service.user.UserService;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,11 +29,11 @@ class JwtServiceTest {
         User user = new User();
         user.setUsername("user");
         user.setIdUser(1L);
-        user.setRole(Collections.singletonList(new Role(1, "USER")));
+        user.setRole(Role.USER);
 
         Mockito.doReturn(user)
                 .when(userService)
-                .findUserByUEP("user");
+                .findUserByUE("user");
 
         Map<String, Object> tokens = jwtService.createTokens("user", List.of("access", "refresh"));
 

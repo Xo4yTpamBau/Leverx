@@ -36,26 +36,15 @@ public class Validator {
             throw new ValidationFailureException(FAILED_VALIDATE_USERNAME);
     }
 
-    public void regExpPhone(String phone) {
-        if (!phone.matches("^375(25|29|33|44)[0-9]{7}$"))
-            throw new ValidationFailureException(FAILED_VALIDATE_PHONE);
-    }
-
     public void regExpPassword(String password) {
         if (!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
             throw new ValidationFailureException(FAILED_VALIDATE_PASSWORD);
     }
 
-
     public void existEmail(String email) {
         if (userRepository.existsByEmail(email))
             throw new ValidationFailureException(EMAIL_BUSY);
 
-    }
-
-    public void existPhone(String phone) {
-        if (userRepository.existsByPhone(phone))
-            throw new ValidationFailureException(PHONE_BUSY);
     }
 
     public void existUsername(String username) {
