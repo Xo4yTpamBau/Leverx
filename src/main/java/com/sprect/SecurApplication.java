@@ -17,7 +17,7 @@ public class SecurApplication {
             "This is a training project that includes: \\\n" +
                     "  Registration, with the user saved in the database (PostgreSQL); \\\n" +
                     "  Authorization using Spring Security;\\\n" +
-                    "  The basic operations for working with the user profile are implemented; \\\n" +
+                    "  The basic operations CRUD implemented; \\\n" +
                     "  Support for a session using access and refresh tokens, for each of which an individual private key is generated, when working with the token, it gets blacklisted; \\\n" +
                     "  Sending emails to confirm mail or password resets; \\\n" +
                     "  NoSQL(REDIS) is used to store private keys, track authentication attempts; \\\n" +
