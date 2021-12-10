@@ -1,6 +1,10 @@
 package com.sprect;
 
 
+import com.sprect.model.Role;
+import com.sprect.model.StatusUser;
+import com.sprect.model.entity.User;
+import com.sprect.repository.sql.UserRepository;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -13,6 +17,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @EnableRedisRepositories("com.sprect")
 @SpringBootApplication
 public class SecurApplication {
+
     private final String DESCRIPTION =
             "This is a training project that includes: \\\n" +
                     "  Registration, with the user saved in the database (PostgreSQL); \\\n" +
@@ -38,6 +43,22 @@ public class SecurApplication {
 
     }
 
+    private final UserRepository userRepository;
+
+    public SecurApplication(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Bean
+    public void initDefaultModerator() {
+        User moderator = new User();
+        moderator.setEmail("admin@mail.com");
+        moderator.setRole(Role.MODERATOR);
+        moderator.setStatus(StatusUser.ACTIVE);
+        moderator.setPassword("$2a$10$lK1NwxZjME2McpzjNrx2P.pHFGJB/E0eTSbqUVgWmslbLp7iN4Jg.");//Qwer1234
+        moderator.setUsername("admin");
+        userRepository.save(moderator);
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(SecurApplication.class, args);

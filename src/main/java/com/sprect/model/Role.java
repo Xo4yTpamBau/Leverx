@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 
 public enum Role {
-    ADMINISTRATOR,
     MODERATOR,
     TRADER,
     USER
