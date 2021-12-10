@@ -35,7 +35,6 @@ public class FileController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
 //    @GetMapping("/download")
 //    public ResponseEntity<?> downloadFile(@RequestHeader("Authorization") String token) {
 //        String id = jwtService.getBodyToken(token.substring(7)).get("id").toString();

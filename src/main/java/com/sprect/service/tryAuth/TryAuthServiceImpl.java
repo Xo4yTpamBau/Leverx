@@ -30,7 +30,7 @@ public class TryAuthServiceImpl implements TryAuthService {
 //            mailService.sendSuspiciousActivity(userByUEN.getEmail(), "Suspicious activity");
 //    }
 
-        if (countTryById > 10) {
+        if (countTryById >= 10) {
             throw new TryAuthException(BLOCKED_USER_TRY_AUTH);
         }
     }

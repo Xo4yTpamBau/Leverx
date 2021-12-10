@@ -1,4 +1,4 @@
-package com.sprect.model;
+package com.sprect.model.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

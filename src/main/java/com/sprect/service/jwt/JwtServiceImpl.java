@@ -12,6 +12,7 @@ import com.sprect.repository.nosql.RefreshKeyRepository;
 import com.sprect.service.user.UserService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import javassist.NotFoundException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -78,7 +79,7 @@ public class JwtServiceImpl implements JwtService {
     public Map<String, Object> createTokens(String username, List<String> types) {
         User user = userService.findUserByUE(username);
         Claims claims = Jwts.claims().setSubject(user.getUsername());
-        claims.put("id", user.getIdUser());
+        claims.setId(user.getIdUser().toString());
         claims.put("role", user.getRole().name());
 
         Map<String, Object> response = new HashMap<>();
@@ -106,20 +107,26 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public Jws<Claims> getClaims(String token) {
-        if (blackListRepositories.findById(token).isPresent()) {
-            throw new JwtException(TOKEN_BLACK_LIST);
-        }
+        try {
+            if (blackListRepositories.findById(token).isPresent()) {
+                throw new JwtException(TOKEN_BLACK_LIST);
+            }
 
-        return Jwts.parserBuilder()
-                .setSigningKeyResolver(new KeyResolver())
-                .build()
-                .parseClaimsJws(token);
+            return Jwts.parserBuilder()
+                    .setSigningKeyResolver(new KeyResolver())
+                    .build()
+                    .parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            throw new JwtException(ACCESS_EXPIRED);
+        } catch (Exception e) {
+            throw new JwtException(ACCESS_INVALID);
+        }
     }
 
     @Override
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;
@@ -127,18 +134,18 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public void validateAccessToken(String token) throws ExpiredJwtException {
-        if (blackListRepositories.findById(token).isPresent()) {
-            throw new JwtException(TOKEN_BLACK_LIST);
-        }
-
         try {
+            if (blackListRepositories.findById(token).isPresent()) {
+                throw new JwtException(TOKEN_BLACK_LIST);
+            }
+
             Jwts.parserBuilder()
                     .setSigningKeyResolver(new KeyResolver())
                     .build()
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
             throw new JwtException(ACCESS_EXPIRED);
-        } catch (JwtException e) {
+        } catch (Exception e) {
             throw new JwtException(ACCESS_INVALID);
         }
     }
@@ -151,7 +158,7 @@ public class JwtServiceImpl implements JwtService {
                     .parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
             throw new JwtException(REFRESH_EXPIRED);
-        } catch (JwtException e) {
+        } catch (Exception e) {
             throw new JwtException(REFRESH_INVALID);
         }
     }

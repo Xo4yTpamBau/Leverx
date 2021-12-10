@@ -1,6 +1,6 @@
 package com.sprect.exception;
 
-import com.sprect.model.ResponseError;
+import com.sprect.model.response.ResponseError;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.ValidationFailureException;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,8 +26,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ExceptionController extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    protected ResponseEntity<Object> userNotFound(Exception ex) {
+    @ExceptionHandler({UsernameNotFoundException.class, NotFoundException.class})
+    protected ResponseEntity<Object> NntFound(Exception ex) {
         return new ResponseEntity<>(new ResponseError(
                 new Date().toString(),
                 404, ex.getMessage()),
@@ -41,56 +42,21 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(ValidationFailureException.class)
-    protected ResponseEntity<Object> validator(Exception ex) {
+    @ExceptionHandler({ValidationFailureException.class, RegistrationException.class})
+    protected ResponseEntity<Object> badRequest(Exception ex) {
         return new ResponseEntity<>(new ResponseError(
                 new Date().toString(),
                 400, ex.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(StatusException.class)
-    protected ResponseEntity<Object> checkStatus(Exception ex) {
+    @ExceptionHandler({TryAuthException.class, RightEditException.class, StatusException.class})
+    protected ResponseEntity<Object> accessException(Exception ex) {
         return new ResponseEntity<>(new ResponseError(
                 new Date().toString(),
                 403, ex.getMessage()),
                 HttpStatus.FORBIDDEN);
     }
-
-    @ExceptionHandler(TryAuthException.class)
-    protected ResponseEntity<Object> tryAuth(Exception ex) {
-        return new ResponseEntity<>(new ResponseError(
-                new Date().toString(),
-                403, ex.getMessage()),
-                HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler(RegistrationException.class)
-    protected ResponseEntity<Object> registration(Exception ex) {
-        return new ResponseEntity<>(new ResponseError(
-                new Date().toString(),
-                400, ex.getMessage()),
-                HttpStatus.BAD_REQUEST);
-    }
-
-//    @ExceptionHandler(RuntimeException.class)
-//    protected ResponseEntity<Object> runtime(Exception ex){
-//        return new ResponseEntity<>(new ResponseError(
-//                new Date().toString(),
-//                500, ex.getMessage()),
-//                HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-//    @ExceptionHandler({RuntimeException.class})
-//    protected ResponseEntity<Object> runtime(Exception ex){
-//        Map<String, Object> newBody = new LinkedHashMap<>();
-//
-//        newBody.put("timestamp", LocalDate.now());
-//        newBody.put("status", 500);
-//        newBody.put("errors", ex.getMessage());
-//
-//        return new ResponseEntity<>(newBody, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

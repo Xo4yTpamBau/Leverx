@@ -3,7 +3,7 @@ package com.sprect.filter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprect.exception.StatusException;
-import com.sprect.model.ResponseError;
+import com.sprect.model.response.ResponseError;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -45,10 +45,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
             ResponseError responseError = new ResponseError(
                     new Date().toString(),
-                    500,
+                    418,
                     e.getMessage());
 
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setStatus(HttpStatus.I_AM_A_TEAPOT.value());
             response.getWriter().write(convertObjectToJson(responseError));
         }
     }

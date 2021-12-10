@@ -14,7 +14,7 @@ import java.util.List;
 public class MailServiceImpl implements MailService {
     private static final String ACTIVATION_EMAIL = "Thanks for signing up with Sprect! You must follow this link within 1 days of registration to activate your account:\n" +
             "\n" +
-            "https://sprect.herokuapp.com/auth/confirmationEmail/%s\n" +
+            "http://localhost:8080/auth/confirmationEmail/%s\n" +
             "\n" +
             "Have fun, and don't hesitate to contact us with your feedback.\n" +
             "\n" +
@@ -26,7 +26,7 @@ public class MailServiceImpl implements MailService {
 
     private static final String RESET_PASSWORD = "Someone (hopefully you) has requested a password reset for your Sprect account. Follow the link below to set a new password:\n" +
             "\n" +
-            "https://sprect.herokuapp.com/auth/resetPassword/%s\n" +
+            "http://localhost:8080/auth/resetPassword/%s\n" +
             "\n" +
             "If you don't wish to reset your password, disregard this email and no action will be taken.\n" +
             "\n" +
@@ -54,7 +54,7 @@ public class MailServiceImpl implements MailService {
         helper.setFrom(username);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(String.format(ACTIVATION_EMAIL, jwtService.createTokens(to, List.of("confirmationEmail"))));
+        helper.setText(String.format(ACTIVATION_EMAIL, jwtService.createTokens(to, List.of("confirmationEmail")).get("confirmationEmailToken")));
 
         emailSender.send(message);
     }
@@ -83,7 +83,7 @@ public class MailServiceImpl implements MailService {
         helper.setFrom(username);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(String.format(RESET_PASSWORD, jwtService.createTokens(to, List.of("resetPassword"))));
+        helper.setText(String.format(RESET_PASSWORD, jwtService.createTokens(to, List.of("resetPassword")).get("resetPasswordToken")));
 
         emailSender.send(message);
     }

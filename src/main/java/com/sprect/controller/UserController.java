@@ -5,6 +5,7 @@ import com.sprect.service.file.FileService;
 import com.sprect.service.jwt.JwtService;
 import com.sprect.service.user.UserService;
 import com.sprect.utils.Validator;
+import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,8 @@ public class UserController {
     }
 
 
-    @GetMapping("/get")
-    public ResponseEntity<?> getUser(@RequestHeader("Authorization") String token) {
+    @GetMapping()
+    public ResponseEntity<?> getUser(@RequestHeader("Authorization") String token){
         String username = jwtService.getClaims(token.substring(7)).getBody().getSubject();
 
         User user = userService.findUserByUE(username);
@@ -47,8 +48,21 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username){
+        User user = userService.findUserByUE(username);
 
-    @PostMapping("/resetPasswordThroughEmail")
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", user);
+
+        if (user.isAvatar()) {
+            user.setUrlAvatar(fileService.getUrlForDownloadAvatar(user.getIdUser().toString()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/resetPasswordThroughEmail")
     public ResponseEntity<?> resetPasswordThroughEmail(@RequestHeader("Authorization") String token,
                                                        @RequestBody Map<String, String> body) {
         validator.regExpPassword(body.get("password"));
@@ -59,7 +73,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/edit/password")
+    @PatchMapping("/edit/password")
     public ResponseEntity<?> resetPassword(@RequestHeader("Authorization") String token,
                                            @RequestBody Map<String, String> body) {
         validator.regExpPassword(body.get("newPassword"));
@@ -72,9 +86,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/edit/username")
+    @PatchMapping("/edit/username")
     public ResponseEntity<?> editUsername(@RequestHeader("Authorization") String token,
-                                          @RequestBody Map<String, String> body) {
+                                          @RequestBody Map<String, String> body){
         validator.regExpUsername(body.get("newUsername"));
 
         String oldUsername = jwtService.getClaims(token.substring(7)).getBody().getSubject();
@@ -86,7 +100,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping()
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
         Object id = jwtService.getClaims(token.substring(7)).getBody().get("id");
         userService.delete(id.toString());

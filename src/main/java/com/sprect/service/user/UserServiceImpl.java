@@ -1,5 +1,6 @@
 package com.sprect.service.user;
 
+import com.sprect.exception.NotFoundException;
 import com.sprect.exception.RegistrationException;
 import com.sprect.exception.StatusException;
 import com.sprect.model.Role;
@@ -142,16 +143,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         User user = findUserByUE(username);
         tryAuthService.checkTryAuth(user.getIdUser());
         return user;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username, String JWT) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username, String JWT) {
         User user = findUserByUE(username);
         checkBlockedUser(user.getStatus());
         return user;
+    }
+
+    @Override
+    public void setTraderRole(Long idUser) {
+        Optional<User> user = userRepository.findById(idUser);
+        user.ifPresent(o -> o.setRole(Role.TRADER));
+        userRepository.save(user.get());
     }
 }

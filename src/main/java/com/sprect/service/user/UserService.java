@@ -2,6 +2,7 @@ package com.sprect.service.user;
 
 import com.sprect.model.StatusUser;
 import com.sprect.model.entity.User;
+import javassist.NotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,9 @@ public interface UserService extends org.springframework.security.core.userdetai
     void deleteAvatar(String id);
 
     @Override
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+    UserDetails loadUserByUsername(String username);
 
-    UserDetails loadUserByUsername(String username, String JWT) throws UsernameNotFoundException;
+    UserDetails loadUserByUsername(String username, String JWT);
+
+    void setTraderRole(Long idUser);
 }

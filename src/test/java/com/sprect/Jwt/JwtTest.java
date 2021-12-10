@@ -43,9 +43,9 @@ public class JwtTest {
 
         Thread.sleep(5000); //For the access token to expire
 
-        this.mockMvc.perform(get("/user/get")
+        this.mockMvc.perform(get("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer_" + tokens.get("accessToken")))
+                        .header("Authorization", "Bearer " + tokens.get("accessToken")))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(containsString(ACCESS_EXPIRED)));
@@ -56,9 +56,9 @@ public class JwtTest {
     void userBlocked() {
         Map<String, Object> tokens = jwtService.createTokens("test3", List.of("access", "refresh"));
 
-        this.mockMvc.perform(get("/user/get")
+        this.mockMvc.perform(get("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer_" + tokens.get("accessToken")))
+                        .header("Authorization", "Bearer " + tokens.get("accessToken")))
                 .andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(containsString(String.format(
@@ -72,9 +72,9 @@ public class JwtTest {
 
         Thread.sleep(5000); //For the access token to expire
 
-        this.mockMvc.perform(get("/user/get")
+        this.mockMvc.perform(get("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer_" + "header.body.JWS"))
+                        .header("Authorization", "Bearer " + "header.body.JWS"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(containsString(ACCESS_INVALID)));

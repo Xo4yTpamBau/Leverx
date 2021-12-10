@@ -49,10 +49,8 @@ public class JwtFilter extends GenericFilterBean {
                 }
             }
             filterChain.doFilter(req, res);
-        } catch (ExpiredJwtException e) {
-            throw new JwtException(DefaultString.ACCESS_EXPIRED);
         } catch (JwtException e) {
-            throw new JwtException(DefaultString.ACCESS_INVALID);
+            throw new JwtException(e.getMessage());
         }
     }
 }

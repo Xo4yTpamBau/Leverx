@@ -1,7 +1,12 @@
 package com.sprect.utils;
 
+import com.sprect.exception.RightEditException;
 import com.sprect.model.entity.User;
+import com.sprect.repository.sql.PageRepository;
 import com.sprect.repository.sql.UserRepository;
+import com.sprect.service.comment.CommentService;
+import com.sprect.service.jwt.JwtService;
+import com.sprect.service.page.PageService;
 import org.springframework.oxm.ValidationFailureException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -16,17 +21,28 @@ import static org.apache.http.entity.ContentType.*;
 @Component
 public class Validator {
     private final UserRepository userRepository;
+    private final PageService pageService;
+    private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public Validator(UserRepository userRepository,
-                     PasswordEncoder passwordEncoder) {
+                     PageService pageService,
+                     CommentService commentService,
+                     PasswordEncoder passwordEncoder,
+                     JwtService jwtService) {
         this.userRepository = userRepository;
+        this.pageService = pageService;
+        this.commentService = commentService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
+
+
+
     public void regExpEmail(String email) {
-        if (!email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
-                "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"))
+        if (!email.matches(PATTERN_EMAIL))
             throw new ValidationFailureException(FAILED_VALIDATE_EMAIL);
     }
 
@@ -37,7 +53,7 @@ public class Validator {
     }
 
     public void regExpPassword(String password) {
-        if (!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))
+        if (!password.matches(PATTERN_PASSWORD))
             throw new ValidationFailureException(FAILED_VALIDATE_PASSWORD);
     }
 
@@ -58,8 +74,21 @@ public class Validator {
             throw new ValidationFailureException(WRONG_OLD_PASSWORD);
     }
 
+    public void checkRightEditPage(String accessToken, Long idPage){
+        if (Long.parseLong(jwtService.getClaims(accessToken.substring(7)).getBody().getId()) != pageService.findById(idPage).getIdUser() ) {
+            throw new RightEditException("У вас нет права для редактирования этой страницы");
+        }
+    }
+
+    public void checkRightEditComment(String accessToken, Long idComment){
+        if (Long.parseLong(jwtService.getClaims(accessToken.substring(7)).getBody().getId()) != commentService.findById(idComment).getIdUser() ) {
+            throw new RightEditException("У вас нет права для редактирования этого комментария");
+        }
+    }
+
     public void typeFileAvatar(MultipartFile file) {
-        if (!Arrays.asList(IMAGE_PNG.getMimeType(),
+        if (!Arrays.asList(
+                IMAGE_PNG.getMimeType(),
                 IMAGE_BMP.getMimeType(),
                 IMAGE_GIF.getMimeType(),
                 IMAGE_JPEG.getMimeType()).contains(file.getContentType())) {

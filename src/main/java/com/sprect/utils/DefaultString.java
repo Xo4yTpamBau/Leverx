@@ -13,7 +13,6 @@ public class DefaultString {
 
     public static final String FAILED_VALIDATE_EMAIL = "The email address is specified incorrectly";
     public static final String FAILED_VALIDATE_USERNAME = "Username must be between 3 and 18 characters long";
-    public static final String FAILED_VALIDATE_PHONE = "The phone is specified incorrectly";
     public static final String FAILED_VALIDATE_FIRST_NAME = "The first name are incorrectly specified";
     public static final String FAILED_VALIDATE_LAST_NAME = "The last name are incorrectly specified";
     public static final String FAILED_VALIDATE_PASSWORD =
@@ -23,6 +22,17 @@ public class DefaultString {
     public static final String EMAIL_BUSY = "This email is busy";
     public static final String USERNAME_BUSY = "This username is busy";
 
+    public static final String EXAMPLE_EMAIL = "{\"email\" : \"user@mail.com\"}";
+    public static final String EXAMPLE_USERNAME = "{\"username\" : \"user\"}";
+    public static final String EXAMPLE_SIGNIN = "{" +
+            "\"username\" : \"user\"," +
+            "\"password\" : \"1234Qwer\"" +
+            "}";
+    public static final String EXAMPLE_UPDATE_TOKENS = "{" +
+            "\"accessToken\" : \"header.body.JWS\",\n" +
+            "\"refreshToken\" : \"header.body.JWS\"" +
+            "}";
+
     public static final String BLOCKED_USER_TRY_AUTH =
             "Suspicious activity has been detected from your account. Your account is temporarily blocked";
     public static final String BAD_CREDENTIALS = "Bad credentials";
@@ -30,6 +40,8 @@ public class DefaultString {
     public static final String USER_BLOCKED = "User account is locked";
     public static final String USER_ALREADY_REGISTRATION = "Such a user is already registered";
     public static final String USER_NOT_FOUND = "A user with this name was not found";
+    public static final String PAGE_NOT_FOUND = "A page was not found";
+    public static final String COMMENT_NOT_FOUND = "A comment was not found";
     public static final String BLOCKER_USER_TRY_AUTH =
             "Suspicious activity has been detected from your account. Your account is temporarily blocked";
     public static final String USER = "" +
